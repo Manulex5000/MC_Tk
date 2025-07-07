@@ -41,7 +41,10 @@ def calcular_CTL(Bl_value, Tl):
 def calcular_CSW(bsw):
     return 1 - bsw / 100
 
-def modelo_montecarlo_gsv(n=100000, api=14.9, Tl=91.0, TOV=435.73, FW=0.0, material="acero al carbon", producto="crude oil", bsw=0.0):
+def modelo_montecarlo_gsv(n=100000, api=14.9, Tl=91.0, TOV=435.73, FW=0.0,
+                          material="acero al carbon", producto="crude oil", bsw=0.0,
+                          u_TOV=0.0, u_FW=0.0, u_CTSh=0.0, u_CTL=0.0):
+    
     dens = calcular_densidad_desde_API(api)
     coef = K_tabla.get(producto.lower(), None)
     if coef is None:
@@ -55,11 +58,6 @@ def modelo_montecarlo_gsv(n=100000, api=14.9, Tl=91.0, TOV=435.73, FW=0.0, mater
     Bl = calcular_Bl(K0, K1, K2, dens)
     CTL_nom = calcular_CTL(Bl, Tl)
     CSW_nom = calcular_CSW(bsw)
-
-    u_TOV = 2.15 / 2.30
-    u_FW = 2.16 / 3.0
-    u_CTSh = 0.000007 / 2.0
-    u_CTL = 0.00030 / 2.0
 
     TOV_sim = np.random.normal(TOV, u_TOV, n)
     FW_sim = np.random.normal(FW, u_FW, n)
