@@ -12,11 +12,11 @@ def simulacion_tov(n_sim=1000000):
     error1 = np.random.normal(0, uc1, n_sim)
 
     # 2. Resolución del equipo (RECTANGULAR)
-    uc2 = 1 / np.sqrt(3)  # = 0.5774 mm
+    uc2 = 1   # = 0.5774 mm
     error2 = np.random.uniform(-uc2, uc2, n_sim)
 
     # 3. Lectura del observador (RECTANGULAR)
-    uc3 = 1 / np.sqrt(3)  # = 0.5774 mm
+    uc3 = 1   # = 0.5774 mm
     error3 = np.random.uniform(-uc3, uc3, n_sim)
 
     # 4. Repetibilidad (NORMAL)
@@ -26,9 +26,9 @@ def simulacion_tov(n_sim=1000000):
     # 5. Efecto temperatura (RECTANGULAR)
     alfa = 0.0000062  # 1/°F
     deltaT = 91.4 - 68.99  # °F
-    uc5 = (alfa * deltaT * nivel_liquido_mm * 10) / np.sqrt(3)  # ≈ 1.9116 mm
+    uc5 = (alfa * deltaT * nivel_liquido_mm * 10)  # ≈ 1.9116 mm
     error5 = np.random.uniform(-uc5, uc5, n_sim)
-
+    print(uc5)
     # 6. Movimiento del plato (RECTANGULAR)
     uc6 = 0 / np.sqrt(3)  # = 0
     error6 = np.random.uniform(-uc6, uc6, n_sim)
@@ -75,7 +75,7 @@ def simulacion_tov(n_sim=1000000):
     # Mostrar resultados
     print("🔷 Simulación Monte Carlo para TOV")
     print(f"🔹 Incertidumbre típica combinada (uc): {uc:.4f} Bbl")
-    print(f"🔹 Incertidumbre expandida (U = uc · k): {u_exp_mc:.4f} Bbl\n")
+    print(f"🔹 Incertidumbre expandida (U = uc · k): {intervalo_95/2:.4f} Bbl\n")
     print(f"🔹 Factor de cobertura: {k_mc:.4f}")
 
     return tov_simulado, u_exp_mc, k_mc
