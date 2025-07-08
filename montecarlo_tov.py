@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def simulacion_tov(n_sim=100_000):
+def simulacion_tov(n_sim=1000000):
     # Valor nominal del TOV y nivel del líquido
     TOV_nominal = 435.73  # Bbl
     nivel_liquido_mm = 2383  # mm
@@ -73,11 +73,12 @@ def simulacion_tov(n_sim=100_000):
     u_exp_mc = uc * k_mc
 
     # Mostrar resultados
-
+    print("🔷 Simulación Monte Carlo para TOV")
     print(f"🔹 Incertidumbre típica combinada (uc): {uc:.4f} Bbl")
     print(f"🔹 Incertidumbre expandida (U = uc · k): {u_exp_mc:.4f} Bbl\n")
+    print(f"🔹 Factor de cobertura: {k_mc:.4f}")
 
-    return tov_simulado, u_exp_mc
+    return tov_simulado, u_exp_mc, k_mc
 
 def graficar_histograma(tov_simulado):
     plt.hist(tov_simulado, bins=100, density=True, color="skyblue", edgecolor="black")
@@ -89,3 +90,7 @@ def graficar_histograma(tov_simulado):
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+if __name__ == "__main__":
+    tov_simulado, u_exp_mc, k_mc = simulacion_tov()
+    graficar_histograma(tov_simulado)

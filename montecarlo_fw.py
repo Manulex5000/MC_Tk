@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.stats import norm
+import matplotlib.pyplot as plt
 
-def simulacion_fw(n_sim=100_000):
+def simulacion_fw(n_sim=1000000):
     # Valor nominal
     FW = 0.0  # Bbl
     nivel_mm = 2383
@@ -72,7 +73,25 @@ def simulacion_fw(n_sim=100_000):
     k = (intervalo_95[1] - intervalo_95[0]) / (2 * uc)
     u_exp_mc = uc * k
 
+    print("🔷 Simulación Monte Carlo para FW")
     print(f"🔹 Incertidumbre típica combinada (uc): {uc:.6f} Bbl")
     print(f"🔹 Incertidumbre expandida (U = uc · k): {u_exp_mc:.6f} Bbl")
     print(f"🔹 Factor de cobertura efectivo (k): {k:.6f}")
-    return fw_simulado, u_exp_mc
+    return fw_simulado, u_exp_mc, k
+
+
+def graficar_histograma(fw_simulado):
+    plt.hist(fw_simulado, bins=100, density=True, color="lightgreen", edgecolor="black")
+    plt.title("Distribución simulada del FW (Monte Carlo)")
+    plt.xlabel("FW [Bbl]")
+    plt.ylabel("Densidad")
+    plt.grid(True)
+    plt.axvline(np.mean(fw_simulado), color="red", linestyle="--", label=f"Media: {np.mean(fw_simulado):.6f} Bbl")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+# Ejecutar simulación y graficar solo si se corre directamente
+if __name__ == "__main__":
+    fw_simulado, u_exp_mc, k = simulacion_fw()
+    graficar_histograma(fw_simulado)

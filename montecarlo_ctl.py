@@ -1,7 +1,8 @@
 # montecarlo_ctl.py
 import numpy as np
+import matplotlib.pyplot as plt
 
-def simulacion_incertidumbre_ctl(n_sim=100000):
+def simulacion_incertidumbre_ctl(n_sim=1000000):
     # Valores nominales
     Tl_nominal = 91.4       # °F
     API_60 = 14.9
@@ -37,4 +38,20 @@ def simulacion_incertidumbre_ctl(n_sim=100000):
     print(f"🔹 Incertidumbre típica combinada del CTL: {round(uc_ctl, 6)}")
     print(f"🔹 Incertidumbre expandida del CTL (k=2): {round(u_expandida, 6)}")
 
-    return u_expandida
+    return perturbacion_ctl, u_expandida, uc_ctl, k
+
+def graficar_ctl(perturbacion_ctl):
+    plt.hist(perturbacion_ctl, bins=100, density=True, color="salmon", edgecolor="black")
+    plt.title("Distribución simulada del CTL (Monte Carlo)")
+    plt.xlabel("Perturbación del CTL")
+    plt.ylabel("Densidad")
+    plt.grid(True)
+    plt.axvline(np.mean(perturbacion_ctl), color="red", linestyle="--", label=f"Media: {np.mean(perturbacion_ctl):.6f}")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+# Ejecutar directamente si es llamado como script
+if __name__ == "__main__":
+    perturbacion_ctl, u_expandida, k = simulacion_incertidumbre_ctl()
+    graficar_ctl(perturbacion_ctl)

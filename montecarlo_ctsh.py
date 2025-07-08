@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.stats import norm
+import matplotlib.pyplot as plt
 
-def simulacion_ctsh(n_sim=100000):
+def simulacion_ctsh(n_sim=1000000):
     # Valores nominales
     Tl_nominal = 91.4   # Temperatura del líquido
     Tamb_nominal = 87.0 # Temperatura ambiente
@@ -43,9 +44,25 @@ def simulacion_ctsh(n_sim=100000):
     U = uc * k
 
     # Imprimir resultados con precisión
-    print(f"🔷 Simulación Monte Carlo para CTSh")
+    print("🔷 Simulación Monte Carlo para CTSh")
     print(f"🔹 Incertidumbre típica combinada (uc): {uc:.10f}")
     print(f"🔹 Factor de cobertura efectivo (k): {k:.6f}")
     print(f"🔹 Incertidumbre expandida (U = uc · k): {U:.10f}")
 
-    return ctsh_sim
+    return ctsh_sim, U, uc, k
+
+def graficar_histograma_ctsh(ctsh_sim):
+    plt.hist(ctsh_sim, bins=100, density=True, color="violet", edgecolor="black")
+    plt.title("Distribución simulada del CTSh (Monte Carlo)")
+    plt.xlabel("CTSh")
+    plt.ylabel("Densidad")
+    plt.grid(True)
+    plt.axvline(np.mean(ctsh_sim), color="red", linestyle="--", label=f"Media: {np.mean(ctsh_sim):.6f}")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+# Si se ejecuta directamente, lanza simulación y gráfica
+if __name__ == "__main__":
+    ctsh_sim, U, k = simulacion_ctsh()
+    graficar_histograma_ctsh(ctsh_sim)
